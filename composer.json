@@ -1,0 +1,49 @@
+{
+    "name": "dreamseeker/element-index-relabels",
+    "description": "Relabels field label within element index.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "element index relabels"
+    ],
+    "support": {
+        "docs": "https://github.com/dreamseeker/craft-element-index-relabels/blob/master/README.md",
+        "issues": "https://github.com/dreamseeker/craft-element-index-relabels/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "dreamseeker",
+            "homepage": "https://github.com/dreamseeker"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "~3.5.0"
+    },
+    "require-dev": {
+      "craftcms/cms": "~3.5.0",
+      "codeception/codeception": "^3.0",
+      "vlucas/phpdotenv": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "dreamseeker\\elementindexrelabels\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Element Index Relabels",
+        "handle": "element-index-relabels",
+        "developer": "dreamseeker",
+        "developerUrl": "https://github.com/dreamseeker",
+        "documentationUrl": "https://github.com/dreamseeker/craft-element-index-relabels/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/dreamseeker/craft-element-index-relabels/master/CHANGELOG.md",
+        "components": {
+            "elementIndexRelabelsService": "dreamseeker\\elementindexrelabels\\services\\ElementIndexRelabelsService"
+        },
+        "class": "dreamseeker\\elementindexrelabels\\ElementIndexRelabels"
+    }
+}
