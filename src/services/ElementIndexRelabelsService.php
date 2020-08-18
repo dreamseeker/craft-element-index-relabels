@@ -68,7 +68,7 @@ class ElementIndexRelabelsService extends Component
             switch ($fieldLayoutTab['type']){
                 case 'craft\\elements\\Entry':
                     $responseKey = 'section:' . $fieldLayoutTab['sUid'];
-                    $isIgnore    = ($fieldLayoutTab['entryTypeSortOrder'] > 1) ? true: false;
+                    $isIgnore    = ($fieldLayoutTab['entryTypeSortOrder'] > 1) ? true : false;
                     break;
                 case 'craft\\elements\\Asset':
                     $responseKey = 'folder:' . $fieldLayoutTab['vfUid'];
