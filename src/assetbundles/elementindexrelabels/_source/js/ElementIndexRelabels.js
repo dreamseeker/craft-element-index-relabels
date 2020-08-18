@@ -145,16 +145,18 @@ Garnish.on(Craft.BaseElementIndex, 'afterInit', function (e) {
     const $sortMenuOptions = $target.sortMenu.$options,
           _labelData       = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
 
-    // Loop through optional items.
-    $sortMenuOptions.each(function(_index, _element){
-      const $element    = $(_element),
-            _attribute  = $element.attr('data-attr');
+    if(typeof _labelData !== 'undefined') {
+      // Loop through optional items.
+      $sortMenuOptions.each(function(_index, _element){
+        const $element    = $(_element),
+              _attribute  = $element.attr('data-attr');
 
-      // Only if _attribute is contained in _labelData.
-      if (_attribute && _attribute in _labelData) {
-        $element.text(_labelData[_attribute]['relabel']);
-      }
-    });
+        // Only if _attribute is contained in _labelData.
+        if (_attribute && _attribute in _labelData) {
+          $element.text(_labelData[_attribute]['relabel']);
+        }
+      });
+    }
   });
 });
 
