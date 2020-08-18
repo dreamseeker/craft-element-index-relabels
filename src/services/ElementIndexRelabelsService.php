@@ -89,8 +89,12 @@ class ElementIndexRelabelsService extends Component
                 $elements = Json::decode($fieldLayoutTab['elements']);
 
                 foreach ($elements as $element){
-                    // Continue if label is saved in custom field.
-                    if($element['type'] === 'craft\\fieldlayoutelements\\CustomField' && $element['label']) {
+                    // Continue if label is saved in custom field.(exclude hidden label)
+                    if(
+                        $element['type'] === 'craft\\fieldlayoutelements\\CustomField' &&
+                        $element['label'] &&
+                        $element['label'] !== '__blank__'
+                    ) {
                         $labelKey          = 'field:' . $fieldIdIndex[$element['fieldUid']];
                         $labels[$labelKey] = [
                             'label'     => $fieldNameIndex[$element['fieldUid']],
