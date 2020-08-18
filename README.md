@@ -26,7 +26,7 @@ To install the plugin, follow these instructions.
 
 This plugin relabels the following elements in the Element Index.
 
-- Header row labels (tabele view only)
+- Header row labels (table view only)
 - Sort menu button and option's label
 - Checkbox labels in the source selection modal
 
