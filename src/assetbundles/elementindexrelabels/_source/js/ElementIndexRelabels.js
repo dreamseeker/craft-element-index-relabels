@@ -19,12 +19,12 @@
  * Overwrite labels contained in ElementIndex page or modal.
  */
 function updateElementIndexLabels(_target){
-  if(Craft.ElementIndexRelabel.sourceKey in Craft.ElementIndexRelabel.data) {
+  if(Craft.ElementIndexRelabels.sourceKey in Craft.ElementIndexRelabels.data) {
     // variables.
     const $toolbar       = _target.$toolbar,
           $sortMenuBtn   = $toolbar.find('.sortmenubtn'),
           _sortMenuLabel = $sortMenuBtn.text().trim(),
-          _labelData     = Craft.ElementIndexRelabel.data[Craft.ElementIndexRelabel.sourceKey];
+          _labelData     = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
 
     // Only table view mode.
     if(_target.viewMode === 'table'){
@@ -77,12 +77,12 @@ function updateSourceSettingsCheckboxLabels() {
 
     if(_checkboxValue.indexOf('field:') != -1){
       let _sourceKey =
-        (Craft.ElementIndexRelabel.sourceKey !== 'user') ?
+        (Craft.ElementIndexRelabels.sourceKey !== 'user') ?
           _checkboxName.replace(/^sources\[(.+)]\[tableAttributes]\[]$/, '$1') :
           'user';
 
-      if(typeof Craft.ElementIndexRelabel.data[_sourceKey] !== 'undefined' && typeof Craft.ElementIndexRelabel.data[_sourceKey][_checkboxValue] !== 'undefined') {
-        _self.find('label').text(Craft.ElementIndexRelabel.data[_sourceKey][_checkboxValue]['relabel']);
+      if(typeof Craft.ElementIndexRelabels.data[_sourceKey] !== 'undefined' && typeof Craft.ElementIndexRelabels.data[_sourceKey][_checkboxValue] !== 'undefined') {
+        _self.find('label').text(Craft.ElementIndexRelabels.data[_sourceKey][_checkboxValue]['relabel']);
       }
     }
   });
@@ -103,7 +103,7 @@ Garnish.on(Craft.BaseElementIndex, 'updateElements', function (e) {
   ];
 
   if(_targetElementTypes.includes($target.elementType)){
-    Craft.ElementIndexRelabel.sourceKey =
+    Craft.ElementIndexRelabels.sourceKey =
       ($target.elementType === 'craft\\elements\\User') ?
         'user' :
         $target.sourceKey;
@@ -118,7 +118,7 @@ Garnish.on(Craft.BaseElementIndex, 'updateElements', function (e) {
 Garnish.on(Craft.EntryIndex, 'updateElements', function (e) {
   const $target = e.target;
 
-  Craft.ElementIndexRelabel.sourceKey = $target.sourceKey;
+  Craft.ElementIndexRelabels.sourceKey = $target.sourceKey;
 
   updateElementIndexLabels($target);
 });
@@ -129,7 +129,7 @@ Garnish.on(Craft.EntryIndex, 'updateElements', function (e) {
 Garnish.on(Craft.AssetIndex, 'updateElements', function (e) {
   const $target = e.target;
 
-  Craft.ElementIndexRelabel.sourceKey = $target.sourceKey;
+  Craft.ElementIndexRelabels.sourceKey = $target.sourceKey;
 
   updateElementIndexLabels($target);
 });
@@ -143,7 +143,7 @@ Garnish.on(Craft.BaseElementIndex, 'afterInit', function (e) {
   // When the SortMenu bubtton has focus.
   $target.$sortMenuBtn.data('menubtn').$btn.on('focus', function () {
     const $sortMenuOptions = $target.sortMenu.$options,
-          _labelData       = Craft.ElementIndexRelabel.data[Craft.ElementIndexRelabel.sourceKey];
+          _labelData       = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
 
     // Loop through optional items.
     $sortMenuOptions.each(function(_index, _element){

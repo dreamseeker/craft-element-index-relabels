@@ -123,7 +123,7 @@ class ElementIndexRelabels extends Plugin
                 $view->registerAssetBundle(ElementIndexRelabelsAsset::class);
 
                 // Formatting output code.
-                $additionalJs = 'Craft.ElementIndexRelabel = ' . Json::encode($this->jsonVars);
+                $additionalJs = 'Craft.ElementIndexRelabels = ' . Json::encode($this->jsonVars);
 
                 // Insert Custom JS at View::POS_END position.
                 // see: https://www.yiiframework.com/doc/api/2.0/yii-web-view#registerJs()-detail
