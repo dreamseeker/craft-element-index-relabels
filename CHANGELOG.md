@@ -1,5 +1,10 @@
 # Element Index Relabels Changelog
 
+## 1.0.2 - 2020-10-18
+
+### Fixed
+- Fixed 'Deprecation Notice:' for Composer v2.0
+
 ## 1.0.1 - 2020-08-18
 
 ### Fixed
