@@ -1,5 +1,10 @@
 # Element Index Relabels Changelog
 
+## 1.0.3 - 2020-10-21
+
+### Fixed
+- Fixed wrong directory path for AssetBundles
+
 ## 1.0.2 - 2020-10-18
 
 ### Fixed
