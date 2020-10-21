@@ -29,7 +29,7 @@ class ElementIndexRelabelsAsset extends AssetBundle
      */
     public function init()
     {
-        $this->sourcePath = "@dreamseeker/elementindexrelabels/assetbundles/elementindexrelabels/dist";
+        $this->sourcePath = "@dreamseeker/elementindexrelabels/assetbundles/ElementIndexRelabels/dist";
 
         $this->depends = [
             CpAsset::class,
