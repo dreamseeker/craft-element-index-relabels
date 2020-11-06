@@ -22,10 +22,10 @@
         }
     ],
     "require": {
-        "craftcms/cms": "~3.5.0"
+        "craftcms/cms": "^3.5.0"
     },
     "require-dev": {
-      "craftcms/cms": "~3.5.0",
+      "craftcms/cms": "^3.5.0",
       "codeception/codeception": "^3.0",
       "vlucas/phpdotenv": "^3.0"
     },
