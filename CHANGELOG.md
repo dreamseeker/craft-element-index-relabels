@@ -1,5 +1,10 @@
 # Element Index Relabels Changelog
 
+## 1.0.4 - 2020-11-06
+
+### Fixed
+- Fixed a required version of Craft
+
 ## 1.0.3 - 2020-10-21
 
 ### Fixed

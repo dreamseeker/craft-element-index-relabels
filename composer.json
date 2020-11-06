@@ -2,7 +2,7 @@
     "name": "dreamseeker/element-index-relabels",
     "description": "Relabels field label within element index.",
     "type": "craft-plugin",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "keywords": [
         "craft",
         "cms",
