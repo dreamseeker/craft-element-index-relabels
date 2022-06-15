@@ -1,5 +1,5 @@
 /**
- * Element Index Relabels plugin for Craft CMS 3.x
+ * Element Index Relabels plugin for Craft CMS
  *
  * Relabels field label within element index.
  *
@@ -187,3 +187,4 @@ Garnish.on(Garnish.Modal, 'show', function (e) {
     }, 200);
   }
 });
+

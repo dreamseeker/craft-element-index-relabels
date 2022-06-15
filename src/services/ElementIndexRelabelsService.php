@@ -1,6 +1,6 @@
 <?php
 /**
- * Element Index Relabels plugin for Craft CMS 3.x
+ * Element Index Relabels plugin for Craft CMS
  *
  * Relabels field label within element index.
  *
@@ -9,8 +9,6 @@
  */
 
 namespace dreamseeker\elementindexrelabels\services;
-
-use dreamseeker\elementindexrelabels\ElementIndexRelabels;
 
 use Craft;
 use craft\base\Component;
@@ -32,23 +30,22 @@ class ElementIndexRelabelsService extends Component
     /*
      * @return array
      */
-    public function getRelabelData()
+    public function getRelabelData(): array
     {
         $query           = $this->_queryFieldLayoutTabs();
         $fieldLayoutTabs = $query->all();
-        $response        = $this->_formatRelabelData($fieldLayoutTabs);
 
-        return $response;
+        return $this->_formatRelabelData($fieldLayoutTabs);
     }
 
     // Private Methods
     // =========================================================================
 
     /*
-     * @param object $fieldLayoutTabs
+     * @param array $fieldLayoutTabs
      * @return array
      */
-    private function _formatRelabelData($fieldLayoutTabs)
+    private function _formatRelabelData(array $fieldLayoutTabs): array
     {
         $fieldIdIndex   = [];
         $fieldNameIndex = [];
@@ -62,16 +59,17 @@ class ElementIndexRelabelsService extends Component
 
         // Check relabel data for each FieldLayoutTab.
         foreach ($fieldLayoutTabs as $fieldLayoutTab){
-            $isIgnore = false;
-            $labels   = [];
+            $responseKey = '';
+            $isIgnore    = false;
+            $labels      = [];
 
             switch ($fieldLayoutTab['type']){
                 case 'craft\\elements\\Entry':
                     $responseKey = 'section:' . $fieldLayoutTab['sUid'];
-                    $isIgnore    = ($fieldLayoutTab['entryTypeSortOrder'] > 1) ? true : false;
+                    $isIgnore    = $fieldLayoutTab['entryTypeSortOrder'] > 1;
                     break;
                 case 'craft\\elements\\Asset':
-                    $responseKey = 'folder:' . $fieldLayoutTab['vfUid'];
+                    $responseKey = 'volume:' . $fieldLayoutTab['vUid'];
                     break;
                 case 'craft\\elements\\Category':
                     $responseKey = 'group:' . $fieldLayoutTab['cgUid'];
@@ -95,7 +93,7 @@ class ElementIndexRelabelsService extends Component
                         $element['label'] &&
                         $element['label'] !== '__blank__'
                     ) {
-                        $labelKey          = 'field:' . $fieldIdIndex[$element['fieldUid']];
+                        $labelKey          = 'field:' . $element['fieldUid'];
                         $labels[$labelKey] = [
                             'label'     => $fieldNameIndex[$element['fieldUid']],
                             'relabel'   => $element['label']
@@ -117,7 +115,7 @@ class ElementIndexRelabelsService extends Component
      *
      * see: https://www.yiiframework.com/doc/guide/2.0/en/db-query-builder
      */
-    private function _queryFieldLayoutTabs()
+    private function _queryFieldLayoutTabs(): Query
     {
         $elementTypes = [
             'craft\\elements\\Entry',
@@ -130,7 +128,7 @@ class ElementIndexRelabelsService extends Component
             ->select([
                 'type' => 'fl.type',
                 'sUid' => 's.uid',
-                'vfUid' => 'vf.uid',
+                'vUid' => 'v.uid',
                 'cgUid' => 'cg.uid',
                 'elements' => 'flt.elements',
                 'entryTypeSortOrder' => 'et.sortOrder'
@@ -140,7 +138,6 @@ class ElementIndexRelabelsService extends Component
             ->leftJoin(['et' => Table::ENTRYTYPES], '[[flt.layoutId]] = [[et.fieldLayoutId]]')
             ->leftJoin(['s' => Table::SECTIONS], '[[et.sectionId]] = [[s.id]]')
             ->leftJoin(['v' => Table::VOLUMES], '[[flt.layoutId]] = [[v.fieldLayoutId]]')
-            ->leftJoin(['vf' => Table::VOLUMEFOLDERS], '[[v.id]] = [[vf.volumeId]]')
             ->leftJoin(['cg' => Table::CATEGORYGROUPS], '[[flt.layoutId]] = [[cg.fieldLayoutId]]')
             ->where(['not', ['[[flt.elements]]' => null]])
             ->andWhere(['in', '[[fl.type]]', $elementTypes])

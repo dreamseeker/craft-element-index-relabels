@@ -1,6 +1,6 @@
 <?php
 /**
- * Element Index Relabels plugin for Craft CMS 3.x
+ * Element Index Relabels plugin for Craft CMS
  *
  * Relabels field label within element index.
  *
@@ -12,8 +12,6 @@ namespace dreamseeker\elementindexrelabels;
 
 use Craft;
 use craft\base\Plugin;
-use craft\services\Plugins;
-use craft\events\PluginEvent;
 
 use yii\base\Event;
 
@@ -37,7 +35,7 @@ class ElementIndexRelabels extends Plugin
     /**
      * @var ElementIndexRelabels
      */
-    public static $plugin;
+    public static Plugin $plugin;
 
     // Public Properties
     // =========================================================================
@@ -45,22 +43,22 @@ class ElementIndexRelabels extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.0';
+    public string $schemaVersion = '1.0.0';
 
     /**
      * @var bool
      */
-    public $hasCpSettings = false;
+    public bool $hasCpSettings = false;
 
     /**
      * @var bool
      */
-    public $hasCpSection = false;
+    public bool $hasCpSection = false;
 
     /**
      * @var array
      */
-    public $jsonVars = [];
+    public array $jsonVars = [];
 
     // Public Methods
     // =========================================================================
@@ -68,19 +66,10 @@ class ElementIndexRelabels extends Plugin
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         self::$plugin = $this;
-
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                }
-            }
-        );
 
         Craft::info(
             Craft::t(
@@ -101,13 +90,13 @@ class ElementIndexRelabels extends Plugin
             $request->getIsAjax() or
             !in_array($request->getSegment(1), $allowedFirstSegment)
         ) {
-            return false;
+            return;
         }
 
         $this->jsonVars  = [
             "segments"  => $request->getSegments(),
             "sourceKey" => '',
-            "data"      => $this->elementIndexRelabelsService->getRelabelData()
+            "data"      => $this->elementIndexRelabelsService->getRelabelData(),
         ];
 
         // Handler: EVENT_BEFORE_RENDER_TEMPLATE

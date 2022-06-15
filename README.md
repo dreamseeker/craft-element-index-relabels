@@ -1,4 +1,4 @@
-# Element Index Relabels plugin for Craft CMS 3.x
+# Element Index Relabels plugin for Craft CMS 4.x
 
 Relabels field label within element index.
 
@@ -6,7 +6,7 @@ Relabels field label within element index.
 
 ## Requirements
 
-This plugin requires Craft CMS 3.5.0 or later.
+This plugin requires Craft CMS 4.0.0 or later.
 
 ## Installation
 

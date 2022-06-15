@@ -1,6 +1,6 @@
 <?php
 /**
- * Element Index Relabels plugin for Craft CMS 3.x
+ * Element Index Relabels plugin for Craft CMS
  *
  * Relabels field label within element index.
  *
@@ -10,7 +10,6 @@
 
 namespace dreamseeker\elementindexrelabels\assetbundles\ElementIndexRelabels;
 
-use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
@@ -27,7 +26,7 @@ class ElementIndexRelabelsAsset extends AssetBundle
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         $this->sourcePath = "@dreamseeker/elementindexrelabels/assetbundles/ElementIndexRelabels/dist";
 
