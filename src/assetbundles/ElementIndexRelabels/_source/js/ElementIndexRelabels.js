@@ -27,40 +27,53 @@ function updateElementIndexLabels(_target){
           _labelData     = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
 
     // Only table view mode.
-    if(_target.viewMode === 'table'){
+    if(_target.viewMode !== 'table' || typeof _target.view.$table === 'undefined' || _target.view === null){
+      return false;
+    }
+
+    let timerId = setTimeout(function repeatTimer() {
       // variables.
       const $view  = _target.view,
             $table = $view.$table;
 
-      // Update labels contained in thead.
-      $table.find('thead > tr > th').each(function (_index, _element) {
-        const $element   = $(_element),
-              _attribute = $element.attr('data-attribute');
+      // After rendering table view.
+      if(_target.viewMode === 'table' && $table.find('thead > tr > th').length){
+        // Update labels contained in thead.
+        $table.find('thead > tr > th').each(function (_index, _element) {
+          const $element   = $(_element),
+                _attribute = $element.attr('data-attribute');
 
-        // Only if _attribute is contained in _labelData.
-        if (_attribute && _attribute in _labelData) {
-          $element.text(_labelData[_attribute]['relabel']);
-        }
-      });
+          // Only if _attribute is contained in _labelData.
+          if (_attribute && _attribute in _labelData) {
+            $element.text(_labelData[_attribute]['relabel']);
+          }
+        });
 
-      // Update labels contained in tbody.
-      $table.find('tbody > tr > td').each(function (_index, _element) {
-        const $element   = $(_element),
-              _attribute = $element.attr('data-attr');
+        // Update labels contained in tbody.
+        $table.find('tbody > tr > td').each(function (_index, _element) {
+          const $element   = $(_element),
+                _attribute = $element.attr('data-attr');
 
-        // Only if _attribute is contained in _labelData.
-        if (_attribute && _attribute in _labelData) {
-          $element.attr('data-title', _labelData[_attribute]);
-        }
-      });
-    }
+          // Only if _attribute is contained in _labelData.
+          if (_attribute && _attribute in _labelData) {
+            $element.attr('data-title', _labelData[_attribute]['relabel']);
+          }
+        });
 
-    // update label of sort menu button.
-    $.each(_labelData, function (_key, _data) {
-      if(_data.label === _sortMenuLabel) {
-        $sortMenuBtn.text(_data.relabel);
+        // update label of sort menu button.
+        $.each(_labelData, function (_key, _data) {
+          if(_data.label === _sortMenuLabel) {
+            $sortMenuBtn.text(_data.relabel);
+          }
+        });
+
+        // Clear timer.
+        timerId = null;
+      } else {
+        // retry
+        timerId = setTimeout(repeatTimer, 200);
       }
-    });
+    }, 200);
   }
 }
 
@@ -88,103 +101,70 @@ function updateSourceSettingsCheckboxLabels() {
   });
 }
 
+
 // Event Listener Methods
 // =========================================================================
 
-/**
- * EventListener : Craft.BaseElementIndex updateElements Event
- */
-Garnish.on(Craft.BaseElementIndex, 'updateElements', function (e) {
-  const $target = e.target;
+jQuery(function($) {
+  /**
+   * EventListener : Garnish.Modal show Event
+   */
+  Garnish.on(Garnish.Modal, 'show', function (e) {
+    const $target = e.target;
 
-  const _targetElementTypes = [
-    'craft\\elements\\Category',
-    'craft\\elements\\User'
-  ];
+    // Source Setting Modal only.
+    if(typeof $target.$sourceSettingsContainer !== 'undefined'){
+      let timerId = setTimeout(function repeatTimer() {
+        // After Ajax loading.
+        if($('.customize-sources-table-column').length){
+          updateSourceSettingsCheckboxLabels();
 
-  if(_targetElementTypes.includes($target.elementType)){
+          // When switching to another source.
+          $($target.$sourcesContainer).find('.customize-sources-item').on('click', function(){
+            updateSourceSettingsCheckboxLabels();
+          });
+
+          // Clear timer.
+          timerId = null;
+        } else {
+          // retry
+          timerId = setTimeout(repeatTimer, 200);
+        }
+      }, 200);
+    }
+  });
+
+  /**
+   * EventListener : Craft.elementIndex updateElements Event
+   */
+  Craft.elementIndex.on('updateElements', function(e){
+    const $target = e.target;
+
     Craft.ElementIndexRelabels.sourceKey =
       ($target.elementType === 'craft\\elements\\User') ?
         'user' :
         $target.sourceKey;
 
+    // update thead labels.
     updateElementIndexLabels($target);
-  }
-});
 
-/**
- * EventListener : Craft.EntryIndex updateElements Event
- */
-Garnish.on(Craft.EntryIndex, 'updateElements', function (e) {
-  const $target = e.target;
+    // When the SortMenu bubtton has focus.
+    $target.$sortMenuBtn.data('menubtn').$btn.on('focus', function () {
+      const $sortMenuOptions = $target.sortMenu.$options,
+            _labelData       = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
 
-  Craft.ElementIndexRelabels.sourceKey = $target.sourceKey;
+      if(typeof _labelData !== 'undefined') {
+        // Loop through optional items.
+        $sortMenuOptions.each(function(_index, _element){
+          const $element    = $(_element),
+            _attribute  = $element.attr('data-attr');
 
-  updateElementIndexLabels($target);
-});
-
-/**
- * EventListener : Craft.AssetIndex updateElements Event
- */
-Garnish.on(Craft.AssetIndex, 'updateElements', function (e) {
-  const $target = e.target;
-
-  Craft.ElementIndexRelabels.sourceKey = $target.sourceKey;
-
-  updateElementIndexLabels($target);
-});
-
-/**
- * EventListener : Craft.BaseElementIndex afterInit Event
- */
-Garnish.on(Craft.BaseElementIndex, 'afterInit', function (e) {
-  const $target = e.target;
-
-  // When the SortMenu bubtton has focus.
-  $target.$sortMenuBtn.data('menubtn').$btn.on('focus', function () {
-    const $sortMenuOptions = $target.sortMenu.$options,
-          _labelData       = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
-
-    if(typeof _labelData !== 'undefined') {
-      // Loop through optional items.
-      $sortMenuOptions.each(function(_index, _element){
-        const $element    = $(_element),
-              _attribute  = $element.attr('data-attr');
-
-        // Only if _attribute is contained in _labelData.
-        if (_attribute && _attribute in _labelData) {
-          $element.text(_labelData[_attribute]['relabel']);
-        }
-      });
-    }
+          // Only if _attribute is contained in _labelData.
+          if (_attribute && _attribute in _labelData) {
+            $element.text(_labelData[_attribute]['relabel']);
+          }
+        });
+      }
+    });
   });
 });
-
-/**
- * EventListener : Garnish.Modal show Event
- */
-Garnish.on(Garnish.Modal, 'show', function (e) {
-  const $target = e.target;
-
-  // Source Setting Modal only.
-  if(typeof $target.$sourceSettingsContainer !== 'undefined'){
-    let timerId = setTimeout(function repeatTimer() {
-      // After Ajax loading.
-      if($('.customize-sources-table-column').length){
-        updateSourceSettingsCheckboxLabels();
-
-        // When switching to another source.
-        $($target.$sourcesContainer).find('.customize-sources-item').on('click', function(){
-          updateSourceSettingsCheckboxLabels();
-        });
-
-        // Clear timer.
-        timerId = null;
-      } else {
-        // retry
-        timerId = setTimeout(repeatTimer, 200);
-      }
-    }, 200);
-  }
-});
-
