@@ -1,5 +1,13 @@
 # Element Index Relabels Changelog
 
+## 2.0.1 - 2022-09-30
+
+### Removed
+- Removed files for code testing
+
+### Fixed
+- Fixed table view labels not replaced
+
 ## 2.0.0 - 2022-06-15
 
 ### Changed
