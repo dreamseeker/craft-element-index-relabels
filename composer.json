@@ -27,7 +27,6 @@
     },
     "require-dev": {
       "craftcms/cms": "^4.0.0",
-      "codeception/codeception": "^3.0",
       "vlucas/phpdotenv": "^5.4.0"
     },
     "autoload": {
