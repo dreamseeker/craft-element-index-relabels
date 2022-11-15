@@ -1,5 +1,10 @@
 # Element Index Relabels Changelog
 
+## 2.0.2 - 2022-11-15
+
+### Changed
+- Add compatibility with Craft 4.3
+
 ## 2.0.1 - 2022-09-30
 
 ### Removed
