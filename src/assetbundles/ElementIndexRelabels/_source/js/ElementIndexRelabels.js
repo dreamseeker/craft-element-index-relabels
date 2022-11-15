@@ -148,23 +148,47 @@ jQuery(function($) {
     // update thead labels.
     updateElementIndexLabels($target);
 
-    // When the SortMenu bubtton has focus.
-    $target.$sortMenuBtn.data('menubtn').$btn.on('focus', function () {
-      const $sortMenuOptions = $target.sortMenu.$options,
-            _labelData       = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
+    if('activeViewMenu' in $target) {
+      // for Craft 4.3
+      const _labelData  = {},
+            _sourceData = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
 
-      if(typeof _labelData !== 'undefined') {
-        // Loop through optional items.
-        $sortMenuOptions.each(function(_index, _element){
-          const $element    = $(_element),
-            _attribute  = $element.attr('data-attr');
+      if(typeof _sourceData !== 'undefined') {
+        for (const _key in _sourceData) {
+          _labelData[_sourceData[_key]['label']] = _sourceData[_key]['relabel'];
+        }
+
+        $target.activeViewMenu.$container.find('.element-index-view-menu-table-column').each(function(){
+          let _self      = $(this),
+              $element   = _self.find('label'),
+              _attribute = $element.text();
 
           // Only if _attribute is contained in _labelData.
           if (_attribute && _attribute in _labelData) {
-            $element.text(_labelData[_attribute]['relabel']);
+            $element.text(_labelData[_attribute]);
           }
         });
       }
-    });
+    } else {
+      // for Craft 4.2.8
+      // When the SortMenu bubtton has focus.
+      $target.$sortMenuBtn.data('menubtn').$btn.on('focus', function () {
+        const $sortMenuOptions = $target.sortMenu.$options,
+              _labelData       = Craft.ElementIndexRelabels.data[Craft.ElementIndexRelabels.sourceKey];
+
+        if(typeof _labelData !== 'undefined') {
+          // Loop through optional items.
+          $sortMenuOptions.each(function(_index, _element){
+            const $element    = $(_element),
+                  _attribute  = $element.attr('data-attr');
+
+            // Only if _attribute is contained in _labelData.
+            if (_attribute && _attribute in _labelData) {
+              $element.text(_labelData[_attribute]['relabel']);
+            }
+          });
+        }
+      });
+    }
   });
 });
